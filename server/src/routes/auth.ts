@@ -1,5 +1,5 @@
 import { Router, type IRouter, type Request, type Response } from "express";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { db, usersTable } from "../db";
 import { signToken, requireAdmin } from "../middleware/auth";
