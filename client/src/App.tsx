@@ -58,17 +58,17 @@ function Router() {
 
 function App() {
   return (
-    <AppProvider>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <AppProvider>
         <TooltipProvider>
-          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+          <WouterRouter base="">
             <Router />
             <AdminAccessButton />
           </WouterRouter>
           <Toaster />
         </TooltipProvider>
-      </QueryClientProvider>
-    </AppProvider>
+      </AppProvider>
+    </QueryClientProvider>
   );
 }
 
