@@ -321,6 +321,21 @@ html.dark .gold-particle {
   animation: particle-drift linear infinite;
 }
 
+/* ══ LIGHT MODE: SOFT ORBS ══ */
+@keyframes orb-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(24px, -32px) scale(1.12); }
+  66% { transform: translate(-18px, 18px) scale(0.92); }
+}
+.light-orb {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212,175,55,0.55) 0%, rgba(243,210,139,0.18) 55%, transparent 80%);
+  filter: blur(6px);
+  pointer-events: none;
+  animation: orb-drift ease-in-out infinite;
+}
+
 /* ══ DARK MODE: GOLD EDGE GLOW ══ */
 html.dark .gold-edge-glow {
   box-shadow: 0 0 0 1px rgba(212,175,55,0.20), 0 8px 40px rgba(212,175,55,0.12);

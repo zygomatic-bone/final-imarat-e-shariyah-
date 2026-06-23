@@ -26,24 +26,36 @@ import {
 } from "@/lib/api";
 
 /* ── Word Reveal ── */
-function WordReveal({ text, delay = 0, style = {} }: { text: string; delay?: number; style?: React.CSSProperties }) {
+function WordReveal({ text, delay = 0, style = {}, clip = true }: { text: string; delay?: number; style?: React.CSSProperties; clip?: boolean }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-10%" });
   const words = text.split(" ");
   return (
     <span ref={ref} style={style}>
-      {words.map((word, i) => (
-        <span key={i} style={{ display: "inline-block", overflow: "hidden", verticalAlign: "bottom", marginRight: "0.28em" }}>
+      {words.map((word, i) =>
+        clip ? (
+          <span key={i} style={{ display: "inline-block", overflow: "hidden", verticalAlign: "bottom", marginRight: "0.28em" }}>
+            <motion.span
+              style={{ display: "inline-block" }}
+              initial={{ y: "110%", opacity: 0, filter: "blur(6px)" }}
+              animate={inView ? { y: 0, opacity: 1, filter: "blur(0px)" } : {}}
+              transition={{ duration: 0.65, delay: delay + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {word}
+            </motion.span>
+          </span>
+        ) : (
           <motion.span
-            style={{ display: "inline-block" }}
-            initial={{ y: "110%", opacity: 0, filter: "blur(6px)" }}
+            key={i}
+            style={{ display: "inline-block", marginRight: "0.28em" }}
+            initial={{ y: 24, opacity: 0, filter: "blur(6px)" }}
             animate={inView ? { y: 0, opacity: 1, filter: "blur(0px)" } : {}}
-            transition={{ duration: 0.65, delay: delay + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.7, delay: delay + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
           >
             {word}
           </motion.span>
-        </span>
-      ))}
+        )
+      )}
     </span>
   );
 }
@@ -163,6 +175,29 @@ function GoldParticles() {
   );
 }
 
+/* ── Light Mode Soft Orbs ── */
+function LightOrbs() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {Array.from({ length: 9 }).map((_, i) => (
+        <div
+          key={i}
+          className="light-orb"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            width: `${30 + Math.random() * 50}px`,
+            height: `${30 + Math.random() * 50}px`,
+            animationDuration: `${14 + Math.random() * 10}s`,
+            animationDelay: `${Math.random() * 8}s`,
+            opacity: 0.18 + Math.random() * 0.22,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 /* ── Department data (structural, not CMS-managed) ── */
 const DEPTS = [
   { icon: Scale,    title: "Darul Qaza",        titleUrdu: "دارالقضاء",    desc: "Islamic judicial court resolving disputes according to Sharia." },
@@ -252,7 +287,7 @@ export default function Home() {
       >
         <MeshGradient />
         <div className={`${isDark ? "islamic-pattern-dark" : "islamic-pattern"} absolute inset-0 pointer-events-none`} />
-        {isDark && <GoldParticles />}
+        {isDark ? <GoldParticles /> : <LightOrbs />}
         <div className="light-streak" style={{ left: "18%", animationDelay: "0s" }} />
         <div className="light-streak" style={{ left: "72%", animationDelay: "2.8s" }} />
 
@@ -281,18 +316,18 @@ export default function Home() {
           </motion.div>
 
           <div
-            className="select-none overflow-hidden px-2"
+            className="select-none px-2"
             style={{
               fontFamily: "'Noto Nastaliq Urdu', serif",
               color: "#D4AF37",
               fontSize: "clamp(4.5rem, 17vw, 15rem)",
-              lineHeight: 1.18,
+              lineHeight: 1.55,
               textShadow: "0 0 120px rgba(212,175,55,0.28), 0 0 40px rgba(212,175,55,0.15)",
               marginBottom: "0.15em",
             }}
             dir="rtl"
           >
-            <WordReveal text={heroDesc} delay={0.15} />
+            <WordReveal text={heroDesc} delay={0.15} clip={false} />
           </div>
 
           <h1
